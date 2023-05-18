@@ -11,7 +11,6 @@ struct Individual
     double val;
     vector<int> r1;
     vector<int> r2;
-    vector<int> beta;
 };
 
 struct Point

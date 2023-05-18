@@ -65,8 +65,7 @@ void OFA::initIndivs(vector<Individual>& indivs)
         }
         //compute the value
         indivs[i].val = computeFucVal(indivs[i].sequence);
-
-        
+        //init the r1 and r2
         for(int j=0;j<POINT_NUM;j++)
         {
             indivs[i].r1.push_back(rand()%2);
@@ -93,8 +92,7 @@ bool OFA::cmp(const Individual& a, const Individual& b)
 }
 
 void OFA::sortIndivs(vector<Individual>& indivs)
-{
-    
+{   
     sort(indivs.begin(),indivs.end(),OFA::cmp);
 }
 
@@ -150,13 +148,13 @@ vector<int> OFA::crossProduct(const int& k,const vector<int>& r)
     return res;
 }
 
-vector<int> OFA::product(const vector<int>& binSeries, const vector<int>& delta)
+vector<int> OFA::product(const vector<int>& binSeries, const vector<int>& r)
 {
     vector<int> res;
     for(int i =0;i<POINT_NUM;i++)
     {
         if(binSeries[i]==1)
-        res.push_back(delta[i]);
+        res.push_back(r[i]);
         else
         res.push_back(null);
     }
@@ -247,7 +245,7 @@ void OFA::update()
 {
     while(t<Max_t)
     {
-        double lambda = 0.1;
+        double lambda = ((double)rand()*100)/100.0;
         sortIndivs(this->indivs);
         //计算min的那个 就是最优的那个
         auto newSeq =  calNewSeq(indivs[N-1],indivs[0],true);
@@ -258,14 +256,18 @@ void OFA::update()
         //计算其他的
         for(int i =N-1;i>=1;i--)
         {
-            for(int j=1;j<i;j++)
+            double optimalVal = indivs[i].val;
+            vector<int> optimalSeq = indivs[i].sequence;
+            for(int j=0;j<i;j++)
             {
                 auto newSeq = calNewSeq(indivs[j],indivs[i],false);
-                if(isBetter(lambda,computeFucVal(newSeq),indivs[i].val))
+                if(isBetter(lambda,computeFucVal(newSeq),optimalVal))
                 {
-                    indivs[i].sequence = newSeq;  //update the sequence of the ith individual.
+                    optimalVal = computeFucVal(newSeq);
+                    optimalSeq = newSeq;
                 }
             }
+            indivs[i].sequence = newSeq;
         }
 
         //update the val
@@ -301,17 +303,17 @@ vector<int> OFA::calNewSeq(const Individual& indiv_a,const Individual& indiv_b, 
      * @attention r1 and r2的来历不明，先写着
     */
    // printf("cross\n");   
-    auto crossRes1 = crossProduct(getK(),indiv_a.r1);//r1 and r2 ?咋来
+    auto crossRes1 = crossProduct(getK(),indiv_b.r1);//r1 and r2 ?咋来
     //printf("product\n");
     auto productRes1 = product(crossRes1,delta);
 
-    auto crossRes2 = crossProduct(getK(),indiv_a.r2);//r1 and r2?怎么找到？？？
+    auto crossRes2 = crossProduct(getK(),indiv_b.r2);//r1 and r2?怎么找到？？？
     auto productRes2 = product(crossRes2,delta);//r1 and r2?怎么找到？？？囚了！！
 
     //printf("minus\n");
     auto minusRes = minus(indiv_b.sequence,productRes1);
     ///printf("add\n");
-    auto addRes = 	add(minusRes,productRes2);
+    auto addRes = add(minusRes,productRes2);
 
     return addRes;
 
