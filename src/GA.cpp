@@ -67,9 +67,14 @@ void GA::fit()
     }
 
     double cnt = 0;
+    double left = 0;
+    double right = 0;
     for(int i=0;i<popSize;i++)
     {
-        indivs[i].end = (indivs[i].fitness+cnt)/sum;
+        indivs[i].left = left;
+        right = (indivs[i].fitness+cnt)/sum;
+        indivs[i].right = right;
+        left = right;
         cnt+=indivs[i].fitness;
     }
   
@@ -130,11 +135,12 @@ void GA::select()
 {
     for(int i=0;i<popSize/2;i++)
     {  
+        //printf("inloop %d\n",i);
         double random = std::abs(rand()%1000)/1000.0;
         int father = 0;
         for(int j=0;j<popSize;j++)
         {
-            if(random<indivs[j].end)
+            if(random>=indivs[i].left && random<=indivs[j].right)
             {
                 father=j;
                 break;
@@ -145,21 +151,22 @@ void GA::select()
         int mother = 0;
         for(int j=0;j<popSize;j++)
         {
-            if(random<indivs[j].end)
+            if(random>=indivs[i].left && random<=indivs[j].right)
             {
                 mother=j;
                 break;
             }
         }
-
+        
         if(father!=mother)
-        {
-            crossover(indivs[father],indivs[mother]);
+        {         
+            crossover(indivs[father],indivs[mother]);     
         }
         else
-        i--;
-              
-    }
+        {
+            i--;
+        }           
+    }  
 }
 
 void GA::mutate()
@@ -183,7 +190,7 @@ void GA::update()
 {
     fit();
     select();
-    mutate();   
+    mutate();    
 }
 
 void GA::train()
@@ -206,9 +213,11 @@ void GA::printRes()
 }
 void GA::sortIndivs()
 {
-    auto cmp = [](const Individual& a, const Individual& b)
+    auto cmp = [](const Individual& a, const Individual& b)->bool
     {
+        if(a.fitness!=b.fitness)
         return a.fitness > b.fitness;
+        return false;
     };
     try
     {

@@ -10,7 +10,8 @@ struct Individual
     vector<int> gene;
 
     double fitness; //the fitness of the individual, higher the better. Maximizes the fitness.
-    double end;//概率的右边界
+    double left;//概率的左边界
+    double right;//概率的右边界
 
     Individual(vector<int>& gene)
     {
