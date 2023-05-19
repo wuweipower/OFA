@@ -245,7 +245,7 @@ void OFA::update()
 {
     while(t<Max_t)
     {
-        double lambda = ((double)rand()*100)/100.0;
+        double lambda = (rand()%100)/100.0;
         sortIndivs(this->indivs);
         //计算min的那个 就是最优的那个
         auto newSeq =  calNewSeq(indivs[N-1],indivs[0],true);

@@ -8,3 +8,5 @@ HELP.md
 
 build/
 
+*/*.exe
+
