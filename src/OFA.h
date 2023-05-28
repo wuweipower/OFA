@@ -1,10 +1,13 @@
+#ifndef OFA_H
+#define OFA_H
 #include<vector>
 #include<iostream>
 #include<algorithm>
 #include<random>
 #include<time.h>
 using std::vector;
-
+namespace ofa
+{
 struct Individual
 {
     vector<int> sequence;
@@ -87,3 +90,6 @@ class OFA
 
     vector<int> calNewSeq(const Individual& indiv_a,const Individual& indiv_b, bool flag);//flag is true when it is the min
 };
+}
+
+#endif

@@ -1,10 +1,14 @@
+#ifndef GA_H
+#define GA_H
+
 #include<iostream>
 #include<vector>
 #include<random>
 #include<ctime> 	//for seeding the random number generator
 #include<algorithm>
 using namespace std;
-
+namespace ga
+{
 struct Individual
 {
     vector<int> gene;
@@ -65,3 +69,6 @@ public:
     void sortIndivs();
     bool inVec(int& num,vector<int>&v);
 };
+}
+
+#endif

@@ -1,5 +1,5 @@
 #include"GA.h"
-
+using namespace ga;
 GA::GA()
 {
     this->popSize = DEFALUT_POP_SIZE;

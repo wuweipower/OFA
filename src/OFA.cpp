@@ -1,5 +1,5 @@
 #include"OFA.h"
-
+using namespace ofa;
 int OFA::null = -1;
 
 const double test[20][2]={
