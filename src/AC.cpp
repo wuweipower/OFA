@@ -52,8 +52,8 @@ const double Alpha = 2; //计算概率中的信息素的重要程度因子
 const double Beta = 2;  //计算概率中的启发函数的重要程度因子
 const double evapRate = 0.1;
 const int ITER_MAX = 200;
-vector<int> tour_best;
-double  len_best = 0xffffff;
+vector<int> tour_best_global;
+double  len_best_global= 0xffffff;
 class Ant
 {
 public:
@@ -257,7 +257,7 @@ void build_tour()
         ant_move();
     }
 }
-void select_best_tour()
+void select_best_tour(vector<int>& tour_best,double & len_best)
 {
     for(int i=1;i<ant_num;++i)
     {
@@ -280,23 +280,31 @@ void flash_ants()//刷新
 int main()
 {    
     init();
+    
     for(int i=0;i<ITER_MAX;++i)
     {
-        build_tour();      
-        select_best_tour();     
-        global_update_pheromones(tour_best,len_best);
+        build_tour();     
+        vector<int> tour_best_local;
+        double  len_best_local=0xfffff; 
+        select_best_tour(tour_best_local,len_best_local);     
+        global_update_pheromones(tour_best_local,len_best_local);
         flash_ants();
+        if(len_best_local<::len_best_global)
+        {
+            len_best_global = len_best_local;
+            tour_best_global = tour_best_local;
+        }
         if((i+1)%10==0)
         {
             cout<<"Iteration "<<i+1
-                <<"\tTour length: "<<len_best<<endl;
+                <<"\tTour length: "<<len_best_global<<endl;
         }
     }
     cout<<"best tour: ";
-    for(int i=0;i<tour_best.size();++i)
+    for(int i=0;i<tour_best_global.size();++i)
     {
-        cout<<tour_best[i]<<" ";
+        cout<<tour_best_global[i]<<" ";
     }
     cout<<endl;
-    cout<<"best len: "<<len_best<<endl;
+    cout<<"best len: "<<len_best_global<<endl;
 }
