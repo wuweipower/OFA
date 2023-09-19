@@ -1,3 +1,13 @@
+空调的模型：人流密度，空调位置，建模，数据。
+
+数据：
+
+企业给的参考：
+
+
+
+
+
 # 简单的复述论文的意思
 
 目前的问题：CNC code中的路径规划如zig, zig-tag, radial, spiral tool paths 不是最优的路径。
@@ -97,3 +107,10 @@ scatter：分散
 Boost
 
 openGL
+
+
+
+
+
+
+
